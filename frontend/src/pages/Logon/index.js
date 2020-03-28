@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link , useHistory} from 'react-router-dom';
 import { FiLogIn } from 'react-icons/fi';
 import './styles.css';
 import logoImg from '../../assets/logo.svg';
@@ -8,13 +8,16 @@ import api from '../../services/api'
 
 export default function Logon(){
     const [id, setId] = useState('');
+    const history = useHistory();
 
     async function handleLogin(e) {
         e.preventDefault();
 
         try {
             const response = await api.post('/session', { id });
-            console.log(response.data.name);
+            localStorage.setItem('ongId', id);
+            localStorage.setItem('ongName', response.data.name);
+            history.push("/profile");
         } catch(e) {
             alert("Falha no login");
         }
